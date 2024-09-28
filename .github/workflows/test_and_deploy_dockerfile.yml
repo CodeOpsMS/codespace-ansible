@@ -33,7 +33,7 @@
 
             - name: Enforce pre commit hooks
               run: pre-commit run --all-files
-      
+
       test:
         runs-on: ubuntu-latest
         steps:
@@ -47,6 +47,6 @@
             uses: hadolint/hadolint-action@v3.1.0
             with:
               dockerfile: Dockerfile
-          
+
           - name: Build test image
             run: docker build . --file Dockerfile --tag $IMAGE_NAME:test
