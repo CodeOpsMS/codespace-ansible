@@ -1,0 +1,52 @@
+---
+    name: Docker Image CI/CD with Conventional Commits
+
+    on:
+      pull_request:
+        branches:
+          - main
+      push:
+        branches:
+          - main
+      workflow_dispatch:
+
+    env:
+      IMAGE_NAME: codespace-ansible
+
+    jobs:
+      verify-conventional-commits:
+        name: 'Verify conventional commits'
+        permissions:
+          id-token: write
+          actions: read
+          contents: write
+          packages: write
+          issues: read
+          checks: write
+          pull-requests: write
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Enforce pre commit hooks
+              run: pre-commit run --all-files
+      
+      test:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+
+          - name: Set up Docker Buildx
+            uses: docker/setup-buildx-action@v1
+
+          - name: Run dockerfile linter
+            uses: hadolint/hadolint-action@v3.1.0
+            with:
+              dockerfile: Dockerfile
+          
+          - name: Build test image
+            run: docker build . --file Dockerfile --tag $IMAGE_NAME:test
