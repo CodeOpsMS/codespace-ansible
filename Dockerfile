@@ -1,7 +1,7 @@
 # ================================
 # Stage 1: Builder
 # ================================
-FROM python:3.11-alpine AS builder
+FROM python:3.12-alpine AS builder
 
 # Metadata for the builder
 LABEL stage=builder
@@ -26,7 +26,7 @@ RUN pip install --user --no-cache-dir -r requirements.txt
 # ================================
 # Stage 2: Final Image
 # ================================
-FROM python:3.11-alpine AS final
+FROM python:3.12-alpine AS final
 
 # Metadata for the final image
 LABEL maintainer="CodeOpsMS"
